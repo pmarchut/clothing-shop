@@ -18,11 +18,13 @@ import InputBase from '@material-ui/core/InputBase';
 import MenuIcon from '@material-ui/icons/Menu'; 
 import IconButton from '@material-ui/core/IconButton';
 
-import { kategorie } from './app/Kategorie';
-import { podkategorie } from './app/Podkategorie';
+// import { kategorie } from './app/Kategorie';
+// import { podkategorie } from './app/Podkategorie';
+
+import { AppState, Actions, store } from './appredux/index';
 
 import { Kategoria, Podkategoria, Kategorie, Podkategorie, 
-  AppState, Actions, store } from './appredux/index';
+  produktService } from './api/index';
 
 import PanelSrodkowy from './app/PanelSrodkowy';
 import { AddItem } from './app/KartaProdukt';
@@ -165,16 +167,30 @@ class App extends React.Component<AppProps, AppComponentState> {
   }
 
   async pobierzKategorie() {
-    new Promise<Kategorie>(resolve => {
-      setTimeout(() => resolve(kategorie), 1000);
-    }).then(kategorie => {
-      this.setState({ ...this.state, kategorie: kategorie });
-    });
-    new Promise<Podkategorie>(resolve => {
-      setTimeout(() => resolve(podkategorie), 1000);
-    }).then(podkategorie => {
-      this.setState({ ...this.state, podkategorie: podkategorie, ladowanie: false });
-    });
+    produktService.getKategorie
+          ({})
+          .then(
+              (res : Kategorie) => {
+                this.setState({ ...this.state, kategorie: res });   
+              }
+          ).catch( console.error  );
+    produktService.getPodkategorie
+          ({})
+          .then(
+              (res : Podkategorie) => {
+                this.setState({ ...this.state, podkategorie: res, ladowanie: false });   
+              }
+          ).catch( console.error  );
+    // new Promise<Kategorie>(resolve => {
+    //   setTimeout(() => resolve(kategorie), 1000);
+    // }).then(kategorie => {
+    //   this.setState({ ...this.state, kategorie: kategorie });
+    // });
+    // new Promise<Podkategorie>(resolve => {
+    //   setTimeout(() => resolve(podkategorie), 1000);
+    // }).then(podkategorie => {
+    //   this.setState({ ...this.state, podkategorie: podkategorie, ladowanie: false });
+    // });
   }
 
   onSzukajChange = (event: React.ChangeEvent<{ name?: string; value: any }>) => {
@@ -260,13 +276,15 @@ class App extends React.Component<AppProps, AppComponentState> {
             </div>
             <Droppable onDrop={(id: string, rozmiar: string) => AddItem(parseInt(id), rozmiar)}
                       className={classes.koszyk}>
-              <Button color="inherit" className={classes.pre}
-                      onClick={() => {
-                        store.dispatch(Actions.pageState.setPokazKoszyk(true));
-                        store.dispatch(Actions.pageState.setPanelSrodkowyTytul('Koszyk'));
-                        }}>
-                <ShoppingCartIcon />  
-                {' Koszyk ' + this.props.page.koszyk.length}   
+              <Button 
+                color="inherit" className={classes.pre}
+                startIcon={<ShoppingCartIcon />}
+                onClick={() => {
+                  store.dispatch(Actions.pageState.setPokazKoszyk(true));
+                  store.dispatch(Actions.pageState.setPanelSrodkowyTytul('Koszyk'));
+                  }}
+              >    
+                {'Koszyk ' + this.props.page.koszyk.length}   
               </Button>
             </Droppable>
           </Toolbar>

@@ -13,17 +13,6 @@ import thunk from 'redux-thunk';
 import { definition, create, combine, StateOf } from 'redux-compact';
 import { setValueReducer } from 'redux-compact/plugins';
 
-export type Kategoria = {
-    id: number;
-    nazwa: string;
-  };
-  
-export type Podkategoria = {
-    id: number;
-    nazwa: string;
-    kategoriaId: number;
-};
-
 type opisPunkt = {
     punkt: string;
 }
@@ -61,8 +50,6 @@ export type Sortuj = {
     numeric: boolean
 }
 
-export type Kategorie = Kategoria[];
-export type Podkategorie = Podkategoria[];
 export type ListaProduktow = Produkt[];
 export type Galeria = Galeria1[];
 export type Koszyk = Koszyk1[];

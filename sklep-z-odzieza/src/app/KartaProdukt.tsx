@@ -24,6 +24,9 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { Button } from '@material-ui/core';
 
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 import { withStyles } from '@material-ui/core/styles';
 import { Theme } from "@material-ui/core/styles";
 
@@ -166,12 +169,18 @@ class KartaProdukt extends React.Component<KartaProduktProps, KartaProduktState>
                                         produktId={this.props.produkt.id} 
                                         produktNazwa={this.props.produkt.nazwa}/>
                       {this.props.page.pokazKoszyk?
-                      <Button variant='contained' size='small' color='secondary'
-                              onClick={() => DelItem(this.props.index)}>
+                      <Button 
+                        variant='contained' size='small' color='secondary'
+                        startIcon={<DeleteIcon />}
+                        onClick={() => DelItem(this.props.index)}
+                      >
                         <b>Usuń z koszyka</b>
                       </Button> :
-                      <Button variant='contained' size='small' color='primary'
-                              onClick={() => AddItem(this.props.produkt.id, this.state.rozmiar)}>
+                      <Button 
+                        variant='contained' size='small' color='primary'
+                        startIcon={<AddShoppingCartIcon />}
+                        onClick={() => AddItem(this.props.produkt.id, this.state.rozmiar)}
+                      >
                         <b>Dodaj do koszyka</b>
                       </Button>}
                     </CardActions>
