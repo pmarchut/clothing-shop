@@ -30,7 +30,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { withStyles } from '@material-ui/core/styles';
 import { Theme } from "@material-ui/core/styles";
 
-import { Produkt, AppState, Actions, store, Koszyk1 } from '../appredux';
+import { AppState, Actions, store, Koszyk1 } from '../appredux';
+
+import { Produkt } from '../api';
 
 import DialogOK from './DialogOK';
 import GaleriaComponent from './GaleriaComponent';

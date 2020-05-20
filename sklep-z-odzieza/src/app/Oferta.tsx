@@ -13,11 +13,13 @@ import Typography from '@material-ui/core/Typography';
 import { Theme, withStyles } from "@material-ui/core/styles";
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import { ListaProduktow, Galeria, Produkt, Koszyk1, 
+import { Koszyk1, 
   AppState, Actions, store } from '../appredux';
 
-import { lista_prodoktow } from './ListaProduktow';
-import { galeria } from './Galeria';
+import { ListaProduktow, Produkt, produktService } from '../api';
+
+// import { lista_prodoktow } from './ListaProduktow';
+// import { galeria } from './Galeria';
 
 import KartaProdukt from './KartaProdukt';
 
@@ -104,26 +106,34 @@ class Oferta extends React.Component<OfertaProps, OfertaState> {
     }
 
     async pobierzListeProdoktow() {
-      new Promise<ListaProduktow>(resolve => {
-        setTimeout(() => resolve(lista_prodoktow), 1000);
-      }).then(lista_prodoktow => {
-        store.dispatch(Actions.pageState.setListaProduktow(lista_prodoktow));
-        this.filtruj();
-        this.setState({ ...this.state, ladowanie: false });
-      });
+      produktService.getProdukty
+          ({})
+          .then(
+              (res : ListaProduktow) => {
+                store.dispatch(Actions.pageState.setListaProduktow(res));
+                this.filtruj();
+                this.setState({ ...this.state, ladowanie: false });     
+              }
+          ).catch( console.error  );
+      // new Promise<ListaProduktow>(resolve => {
+      //   setTimeout(() => resolve(lista_prodoktow), 1000);
+      // }).then(lista_prodoktow => {
+      //   store.dispatch(Actions.pageState.setListaProduktow(lista_prodoktow));
+      //   this.filtruj();
+      //   this.setState({ ...this.state, ladowanie: false });
+      // });
     }
 
-    async pobierzGalerie() {
-      new Promise<Galeria>(resolve => {
-        setTimeout(() => resolve(galeria), 1000);
-      }).then(galeria => {
-        store.dispatch(Actions.pageState.setGaleria(galeria));
-      });
-    }
+    // async pobierzGalerie() {
+    //   new Promise<Galeria>(resolve => {
+    //     setTimeout(() => resolve(galeria), 1000);
+    //   }).then(galeria => {
+    //     store.dispatch(Actions.pageState.setGaleria(galeria));
+    //   });
+    // }
   
     componentDidMount(){
-      this.pobierzListeProdoktow();
-      this.pobierzGalerie();      
+      this.pobierzListeProdoktow();     
     }
 
     componentDidUpdate(prevProps: OfertaProps){

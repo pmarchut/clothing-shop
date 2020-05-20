@@ -2,8 +2,10 @@ import React, { Fragment } from 'react';
 import Viewer from 'react-viewer';
 import Button from '@material-ui/core/Button';
 
-import { AppState, store } from '../appredux'
+import { AppState, store, Actions } from '../appredux'
 import { connect } from 'react-redux';
+
+import { Galeria1, produktService } from '../api';
 
 import theme from '../themes';
 
@@ -33,12 +35,29 @@ class GaleriaComponent extends React.Component<GaleriaProps, GaleriaState> {
       images: []
     };
   }
+
+  async pobierzGalerie() {
+    let gal = store.getState().pageState.galeria;
+    const index : number = gal.findIndex(item => item.id === this.props.produktId);
+
+    if(index < 0){ 
+      await produktService.getGaleria
+          ({productId: this.props.produktId}, {})
+          .then(
+              (res : Galeria1) => {
+                gal.push(res);
+                store.dispatch(Actions.pageState.setGaleria(gal));          
+              }
+          ).catch( console.error  );
+    }
+    this.prepare();
+  }
   
   prepare() {
     let gal = store.getState().pageState.galeria;
-    const index : number = gal.findIndex(item => item.id === this.props.produktId)
-    
-      if(index > 0){ 
+    const index : number = gal.findIndex(item => item.id === this.props.produktId);
+
+      if(index >= 0){ 
         let images : TImage[] = [];
         if (gal[index].obrazki)
           for (const g of gal[index].obrazki) {
@@ -48,12 +67,12 @@ class GaleriaComponent extends React.Component<GaleriaProps, GaleriaState> {
             });
           }
         this.setState({ ...this.state, visible: true, images: images});
-      } 
+      }
   }
 
 switchVisible(newVisible : boolean) {
   if (newVisible !== this.state.visible) {
-    if(newVisible) this.prepare();
+    if(newVisible) this.pobierzGalerie();
     else this.setState({...this.state, visible:newVisible});
   }
 }  
